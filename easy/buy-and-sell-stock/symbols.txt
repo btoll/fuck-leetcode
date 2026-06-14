@@ -1,0 +1,4 @@
+break main.maxProfit
+display -a largest
+display -a smallest
+display -a i

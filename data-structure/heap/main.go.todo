@@ -1,0 +1,162 @@
+package main
+
+import (
+	"fmt"
+)
+
+type BinaryHeap interface {
+	ExtractMin() int
+	GetItems() []int
+	Insert(int)
+	Len() int
+	Peek() int
+}
+
+type MinHeap struct {
+	items []int
+}
+
+func NewMinHeap(v []int) BinaryHeap {
+	m := &MinHeap{
+		items: v,
+	}
+	m.heapify()
+	return m
+}
+
+func (m *MinHeap) bubbleDown(startIndex int) {
+	l := m.Len()
+	i := startIndex
+	for i < l {
+		left := 2*i + 1
+		right := 2*i + 2
+		child := -1
+		if left < l {
+			child = left
+			if right < l && m.items[right] < m.items[left] {
+				child = right
+			}
+		}
+		if child == -1 || m.items[child] > m.items[i] {
+			break
+		}
+		m.items[i], m.items[child] = m.items[child], m.items[i]
+		i = child
+	}
+}
+
+func (m *MinHeap) bubbleUp() {
+	for i := m.Len() - 1; i > 0; {
+		parent := (i - 1) / 2
+		if m.items[i] < m.items[parent] {
+			m.items[i], m.items[parent] = m.items[parent], m.items[i]
+			i = parent
+			continue
+		}
+		break
+	}
+}
+
+func (m *MinHeap) heapify() {
+	for i := len(m.items)/2 - 1; i >= 0; i-- {
+		m.bubbleDown(i)
+	}
+}
+
+func (m *MinHeap) ExtractMin() int {
+	v := m.items[0]
+	m.items[0] = m.items[m.Len()-1]
+	m.items = m.items[:m.Len()-1]
+	m.bubbleDown(0)
+	fmt.Println("is heap valid?", validateMinHeap(m.items))
+	return v
+}
+
+func (m *MinHeap) GetItems() []int {
+	return m.items
+}
+
+func (m *MinHeap) Insert(v int) {
+	m.items = append(m.items, v)
+	m.bubbleUp()
+}
+
+func (m *MinHeap) Len() int {
+	return len(m.items)
+}
+
+func (m *MinHeap) Peek() int {
+	return m.items[0]
+}
+
+func validateMinHeap(nodes []int) bool {
+	if len(nodes) < 2 {
+		return true
+	}
+	for i := 0; i < len(nodes)/2; i++ {
+		left := 2*i + 1
+		right := 2*i + 2
+		if left < len(nodes) && nodes[left] < nodes[i] {
+			return false
+		}
+		if right < len(nodes) && nodes[right] < nodes[i] {
+			return false
+		}
+	}
+	return true
+}
+
+func heapSort(heap BinaryHeap) []int {
+	l := heap.Len()
+	nums := make([]int, l)
+	for i := 0; i < l; i++ {
+		nums[i] = heap.ExtractMin()
+	}
+	return nums
+}
+
+func main() {
+	// 2i + 1
+	// 2i + 2
+	// (i - 1) / 2
+
+	//           2
+	//	        /  \
+	//	       5     8
+	//	      / \   / \
+	//	     9   7 12  15
+	//      / \ /
+	//    18 20 16
+	tests := []struct {
+		input  []int
+		output []int
+		insert int
+	}{
+		{
+			input:  []int{10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+			insert: 11,
+		},
+		{
+			input:  []int{2, 5, 8, 9, 7, 12, 15, 18, 20, 16},
+			insert: 3,
+		},
+		{
+			input:  []int{7, 6, 5, 4, 3, 2, 1},
+			insert: 0,
+		},
+		{
+			input:  []int{10, 20, 30, 40, 50},
+			insert: 15,
+		},
+		{
+			input:  []int{5, 10, 15, 20, 25, 30},
+			insert: 3,
+		},
+	}
+	for _, test := range tests {
+		heap := NewMinHeap(test.input)
+		heap.Insert(test.insert)
+		fmt.Println("Valid heap:", validateMinHeap(heap.GetItems()))
+		fmt.Println(heapSort(heap))
+	}
+}

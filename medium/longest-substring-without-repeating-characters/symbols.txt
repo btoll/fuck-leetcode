@@ -1,0 +1,9 @@
+break main.lengthOfLongestSubstring
+display -a maxWindow
+display -a seen
+display -a windowEnd
+display -a windowStart
+display -a i
+display -a v
+display -a found
+display -a index

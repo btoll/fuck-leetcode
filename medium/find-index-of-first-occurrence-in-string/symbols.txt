@@ -1,0 +1,5 @@
+break main.strStr
+display -a window
+display -a i
+display -a haystack[i]
+display -a needle[window]

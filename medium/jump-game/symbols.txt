@@ -1,0 +1,4 @@
+break main.canJump
+display -a l
+display -a i
+display -a v

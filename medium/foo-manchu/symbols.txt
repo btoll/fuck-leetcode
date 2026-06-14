@@ -1,0 +1,10 @@
+break main.splitWords
+display -a n
+display -a wasSpace
+display -a setBits
+display -a r
+display -a %v s[i]
+
+display -a isSpace
+display -a wasSpace
+display -a wasSpace

@@ -1,0 +1,5 @@
+break main.maxArea
+display -a maxHeight
+display -a i
+display -a j
+display -a currentHeight

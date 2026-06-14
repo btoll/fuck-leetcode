@@ -1,0 +1,3 @@
+break main.removeElement
+display -a boundary
+display -a i
